@@ -22,6 +22,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
 }
 
 dependencies {
@@ -33,12 +41,18 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0' //added for recycler view
+    implementation 'androidx.recyclerview:recyclerview:1.1.0' //added for recycler view
     implementation 'com.squareup.retrofit2:retrofit:2.5.0' // retrofit for http requests
     implementation 'com.squareup.retrofit2:converter-scalars:2.5.0' // use scalar converters, convert response to strings
     implementation 'com.google.code.gson:gson:2.8.5'//gson
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0' //gson converter for retrofit
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0' // enable viewmodel
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0' // enable viewmodel
+    implementation "android.arch.work:work-runtime:1.0.1" //workmanager
+    implementation 'androidx.preference:preference:1.1.1' //preferancemanage
+    implementation 'androidx.core:core-ktx:1.3.2' //core ktx
+
+
+
 
 
 

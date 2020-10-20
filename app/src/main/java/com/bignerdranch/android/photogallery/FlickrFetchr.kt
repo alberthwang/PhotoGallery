@@ -7,32 +7,58 @@ import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.bignerdranch.android.photogallery.api.FlickrApi
-import com.bignerdranch.android.photogallery.api.FlickrResponse
-import com.bignerdranch.android.photogallery.api.PhotoResponse
+import com.bignerdranch.android.photogallery.api.PhotoInterceptor
+import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.scalars.ScalarsConverterFactory
 
 private const val TAG = "FlickrFetchr"
 class FlickrFetchr {
     private val flickrApi: FlickrApi
     init {
+        //for search bar
+        val client = OkHttpClient.Builder()
+            .addInterceptor(PhotoInterceptor())
+            .build()
+
         //execute asynchronous web request
         val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl("https://api.flickr.com/")
             .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
             .build()
         flickrApi = retrofit.create(FlickrApi::class.java)
     }
 
-    //get website data, uses flickrresponse to use flickr api to get images in form of list of galleryitem
+    fun fetchPhotosRequest(): Call<FlickrResponse> {
+        return flickrApi.fetchPhotos()
+    }
+
     fun fetchPhotos(): LiveData<List<GalleryItem>> {
+        return fetchPhotoMetadata(fetchPhotosRequest())
+
+    }
+
+    fun searchPhotosRequest(query: String): Call<FlickrResponse> {
+        return flickrApi.searchPhotos(query)
+    }
+
+
+    fun searchPhotos(query: String): LiveData<List<GalleryItem>> {
+        return fetchPhotoMetadata(searchPhotosRequest(query))
+
+    }
+
+
+    //get website data, uses flickrresponse to use flickr api to get images in form of list of galleryitem
+    private fun fetchPhotoMetadata(flickrRequest: Call<FlickrResponse>)
+            : LiveData<List<GalleryItem>> {
         val responseLiveData: MutableLiveData<List<GalleryItem>> = MutableLiveData()
-        val flickrRequest: Call<FlickrResponse> = flickrApi.fetchPhotos()
+        //val flickrRequest: Call<FlickrResponse> = flickrApi.fetchPhotos()
         flickrRequest.enqueue(object : Callback<FlickrResponse> {
             override fun onFailure(call: Call<FlickrResponse>, t: Throwable) {
                 Log.e(TAG, "Failed to fetch photos", t)
@@ -57,6 +83,7 @@ class FlickrFetchr {
         })
         return responseLiveData
     }
+
 
         //adding image downloading
     @WorkerThread
