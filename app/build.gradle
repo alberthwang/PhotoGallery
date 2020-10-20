@@ -33,5 +33,16 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0' //added for recycler view
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0' // retrofit for http requests
+    implementation 'com.squareup.retrofit2:converter-scalars:2.5.0' // use scalar converters, convert response to strings
+    implementation 'com.google.code.gson:gson:2.8.5'//gson
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0' //gson converter for retrofit
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0' // enable viewmodel
+
+
+
+
+
 
 }
